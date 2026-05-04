@@ -1,0 +1,41 @@
+version: 1
+swarm:
+  name: "{{PROJECT_NAME}} — Lightning Rails Dev Team"
+  main: architect
+
+  mcps:
+    - name: rails
+      type: stdio
+      command: rails-mcp-server
+      args: []
+      env:
+        RAILS_ENV: development
+
+  instances:
+    architect:
+      description: "Rails architect — plans, scopes, decides risk, coordinates implementation (Lightning Rails)"
+      directory: .
+      model: opus
+      connections: [backend, frontend, tests]
+      prompt_file: .claude-on-rails/prompts/architect.md
+
+    backend:
+      description: "Backend specialist — models, services, controllers, jobs, Pundit, Pay gem, Devise (Lightning Rails)"
+      directory: .
+      model: opus
+      allowed_tools: [Read, Edit, Write, Bash, Grep, Glob, LS]
+      prompt_file: .claude-on-rails/prompts/backend.md
+
+    frontend:
+      description: "Frontend specialist — views, Tailwind CSS 4, DaisyUI 5, Turbo, Stimulus, Lucide icons (Lightning Rails)"
+      directory: .
+      model: opus
+      allowed_tools: [Read, Edit, Write, Bash, Grep, Glob, LS]
+      prompt_file: .claude-on-rails/prompts/frontend.md
+
+    tests:
+      description: "Testing specialist — RSpec, FactoryBot, Playwright, Pundit policy specs (Lightning Rails)"
+      directory: .
+      model: opus
+      allowed_tools: [Read, Edit, Write, Bash, Grep, Glob, LS]
+      prompt_file: .claude-on-rails/prompts/tests.md

@@ -1,0 +1,39 @@
+# Your global rules
+
+Customize this file and save it as ~/.claude/CLAUDE.md.
+Everything here loads into every Claude Code session on your machine.
+
+## How I work
+Discovery before implementation. When I ask you to build something, audit what exists first.
+Understand the architecture. Surface risks. Propose a plan. Wait for my OK before writing code.
+
+## Writing style
+No em-dashes. Use commas, periods, or semicolons instead.
+Plain prose. No corporate filler words like "comprehensive," "robust," or "leverage."
+Paragraphs over bullet dumps when explaining. Bullets only for concrete item lists.
+Short, direct sentences. Lead with the answer.
+
+## Token discipline
+Prefer grep and targeted reads over full file dumps.
+Don't re-read files already seen this session unless content changed.
+Start codebase exploration with structure (glob, grep) before reading files.
+Use Haiku-model subagents for mechanical tasks when the work is parallelizable.
+
+## Code principles
+Minimal changes only. Don't refactor, docstring, or "improve" code I didn't ask about.
+Three similar lines beat a premature abstraction. Don't over-engineer.
+Assessment before architecture. Architecture before implementation.
+
+## My stack (edit this)
+Primary: Rails 8, Ruby, Postgres, Redis, Sidekiq.
+Frontend: Tailwind, Hotwire (Turbo + Stimulus).
+Infra: your hosting here.
+
+## Swarm deference
+If a swarm.yml exists in the project root, that system owns orchestration. Don't duplicate it.
+
+## Missing project config
+If this project has no CLAUDE.md and the task is non-trivial, mention it. Offer to scaffold one.
+
+## Learned
+Add lessons here over time via /lesson. One line each.

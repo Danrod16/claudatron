@@ -1,0 +1,15 @@
+# [Project Name]
+
+## What this is
+[One sentence describing the project and its purpose.]
+
+## Stack
+[e.g., Rails 8, Postgres, Tailwind, Stimulus]
+
+## Key commands
+- Dev: [e.g., bin/dev]
+- Test: [e.g., bin/rails test]
+- Deploy: [e.g., git push sliplane main]
+
+## Conventions
+[Start empty. Add rules as you learn them via /lesson.]
