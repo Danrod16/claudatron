@@ -142,6 +142,27 @@ cd claudatron
 
 Requires: [claude-swarm](https://github.com/paladinsec/claude-swarm) gem. Optional: [rails-mcp-server](https://github.com/nicholasgriffintn/rails-mcp-server) gem.
 
+### Updating
+
+The global layer is shared across every project, so updating is one command:
+
+```bash
+cd ~/code/claudatron && git pull && ./install.sh
+```
+
+This refreshes `~/.claude/commands/` and `~/.claude/templates/`. Every project picks up the new slash commands on its next session. Nothing to re-run per project.
+
+What `install.sh` leaves alone:
+
+- `~/.claude/CLAUDE.md` (skipped if it exists, so your personal edits stay)
+- `.cc/` folders inside projects (those are state, not config)
+- Project-level `CLAUDE.md` files
+
+Two cases where you do re-run something per project:
+
+1. **Swarm template changed** and you want the update in a Rails project: re-run `./swarm/install.sh /path/to/project`. This overwrites `claude-swarm.yml` and the `.claude-on-rails/prompts/*.md` files, so commit local tweaks first. `settings.local.json` is skip-if-exists.
+2. **New `.cc/` template files** and you want them in an existing project: run `cc-init` inside the project. Skip-if-exists per file, so your continuity state is safe.
+
 ### Using Claudatron with a non-Rails stack
 
 Claudatron as a whole is stack-agnostic. The global CLAUDE.md is a baseline you edit to match your own stack. The nine slash commands adapt to whatever project they run in. The continuity layer (`.cc/`) is plain markdown; no stack assumptions.
