@@ -98,6 +98,46 @@ cd claudatron
 
 Requires: [claude-swarm](https://github.com/paladinsec/claude-swarm) gem. Optional: [rails-mcp-server](https://github.com/nicholasgriffintn/rails-mcp-server) gem.
 
+### Using the swarm with a non-Rails stack
+
+The swarm structure (architect → backend / frontend / tests) is stack-agnostic. The four prompt files just happen to be filled with Rails/Lightning conventions. Setup is identical: run `./swarm/install.sh /path/to/your/project`, then ask Claude to rewrite the prompts for your stack.
+
+Paste this into Claude inside your target project, swapping the placeholders:
+
+```
+Rewrite the four prompt files in .claude-on-rails/prompts/ (architect.md,
+backend.md, frontend.md, tests.md) to match this project's stack.
+
+Replace Rails-specific conventions with conventions for:
+- Language/runtime: {{LANGUAGE}}             # e.g. TypeScript / Node 20
+- Backend framework: {{BACKEND}}             # e.g. Next.js App Router, Django, Phoenix, Fastify
+- Frontend stack: {{FRONTEND}}               # e.g. React + Tailwind, LiveView, HTMX, Svelte
+- ORM / data layer: {{DATA}}                 # e.g. Prisma, Drizzle, SQLAlchemy, Ecto
+- Auth: {{AUTH}}                             # e.g. Clerk, NextAuth, Devise, Phoenix.LiveView auth
+- Payments: {{PAYMENTS}}                     # e.g. Stripe SDK, Lemon Squeezy, none
+- Background jobs: {{JOBS}}                  # e.g. BullMQ, Celery, Oban, none
+- Testing: {{TESTING}}                       # e.g. Vitest + Playwright, Pytest, ExUnit
+
+Rules:
+1. Keep the section headings and overall structure of each prompt.
+2. Replace every Rails-specific example (ActiveRecord, Pundit, Sidekiq, Turbo,
+   Stimulus, Devise, Pay gem, Lightning Rails) with the equivalent in my stack.
+   If there is no equivalent, drop the section.
+3. Keep the "Safety — Stop and Ask Before" list. Rewrite items to reflect
+   risky areas in my stack (auth, payments, migrations, destructive changes).
+4. Do not invent libraries I did not list. If a section has no real equivalent
+   in my stack, remove it rather than guessing.
+5. Keep prompts under 120 lines each.
+
+After rewriting, also update claude-swarm.yml: change the `description` field
+of each agent to mention my stack, and rename the .claude-on-rails directory
+reference if you like (optional).
+
+Show me a diff before writing.
+```
+
+You can also rename `.claude-on-rails/` to something stack-appropriate (e.g. `.claude-on-next/`) — just update the four `prompt_file:` paths in `claude-swarm.yml` to match.
+
 ## The feedback loop
 
 Claudatron includes a self-improvement mechanism via `/lesson`.
