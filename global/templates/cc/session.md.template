@@ -1,0 +1,23 @@
+# Session
+
+Last session's summary. Rewritten by /checkpoint at the end of each session, read by /resume at the start of the next.
+
+## Branch
+[current branch]
+
+## Last commit
+[short SHA + subject]
+
+## Shipped this session
+- [one line each]
+
+## In progress
+- [one line each]
+
+## Next 3 actions
+1. [next concrete action]
+2. [next concrete action]
+3. [next concrete action]
+
+## Blockers
+- [empty if none]

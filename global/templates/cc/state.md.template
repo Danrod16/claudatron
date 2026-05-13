@@ -1,0 +1,12 @@
+# State
+
+Current snapshot of the project. Updated by /checkpoint when something material changes.
+
+## Live
+[What's in production. Branch, version, URL.]
+
+## In flight
+[Work that's started but not shipped. One line each.]
+
+## Environment
+[Local setup quirks, env vars, services that need to be running.]

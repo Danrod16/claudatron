@@ -1,0 +1,8 @@
+# Decisions
+
+ADR-lite log. Appended by /checkpoint when an architectural decision was made this session. Newest entries at the top.
+
+## YYYY-MM-DD — [short title]
+**Decision:** [one or two sentences]
+**Why:** [the constraint or motivation]
+**Alternatives:** [what was considered and rejected]
