@@ -31,10 +31,10 @@ for cmd in "$SCRIPT_DIR/global/commands/"*.md; do
   echo -e "  ${GREEN}+${NC} ~/.claude/commands/$filename"
 done
 
-# Copy templates
+# Copy templates (recursive, so subdirs like cc/ come along)
 for tmpl in "$SCRIPT_DIR/global/templates/"*; do
   filename=$(basename "$tmpl")
-  cp "$tmpl" ~/.claude/templates/"$filename"
+  cp -R "$tmpl" ~/.claude/templates/"$filename"
   echo -e "  ${GREEN}+${NC} ~/.claude/templates/$filename"
 done
 
@@ -48,14 +48,48 @@ else
   echo -e "  ${GREEN}+${NC} ~/.claude/CLAUDE.md (from example — edit to personalize)"
 fi
 
+# Optional: install cc-init helper for scaffolding .cc/ into projects
+echo ""
+read -r -p "Install cc-init helper to ~/.local/bin? [y/N] " reply
+if [[ "$reply" =~ ^[Yy]$ ]]; then
+  mkdir -p ~/.local/bin
+  cat > ~/.local/bin/cc-init <<'CCINIT'
+#!/bin/bash
+set -euo pipefail
+SRC="$HOME/.claude/templates/cc"
+DEST="./.cc"
+if [ ! -d "$SRC" ]; then
+  echo "cc-init: $SRC missing. Reinstall Claudatron." >&2
+  exit 1
+fi
+mkdir -p "$DEST"
+for t in "$SRC"/*.template; do
+  name=$(basename "$t" .template)
+  if [ -e "$DEST/$name" ]; then
+    echo "  skip $DEST/$name (exists)"
+  else
+    cp "$t" "$DEST/$name"
+    echo "  +    $DEST/$name"
+  fi
+done
+echo "Done. Continuity files live in $DEST/"
+CCINIT
+  chmod +x ~/.local/bin/cc-init
+  echo -e "  ${GREEN}+${NC} ~/.local/bin/cc-init"
+fi
+
 echo ""
 echo "Done. Available commands:"
-echo "  /audit      — Structured discovery before implementation"
-echo "  /architect  — Plan, assess risk, coordinate implementation"
-echo "  /backend    — Backend implementation (Rails conventions)"
-echo "  /frontend   — Frontend implementation (Hotwire/Tailwind)"
-echo "  /tests      — Write and run tests"
-echo "  /lesson     — Capture a lesson learned"
+echo "  /audit       — Structured discovery before implementation"
+echo "  /architect   — Plan, assess risk, coordinate implementation"
+echo "  /backend     — Backend implementation (Rails conventions)"
+echo "  /frontend    — Frontend implementation (Hotwire/Tailwind)"
+echo "  /tests       — Write and run tests"
+echo "  /lesson      — Capture a lesson learned"
+echo "  /resume      — Session opener (reads .cc/ + git)"
+echo "  /checkpoint  — Session closer (writes .cc/session.md)"
+echo "  /roadmap     — View / edit .cc/roadmap.md"
 echo ""
 echo "Next: edit ~/.claude/CLAUDE.md to match your preferences and stack."
+echo "      In a project, run cc-init to scaffold .cc/ (if you installed the helper)."
 echo ""
