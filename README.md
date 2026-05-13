@@ -1,6 +1,13 @@
 # Claudatron
 
-A lean Claude Code setup for solo founders who want discovery-first workflows, step-by-step architect control, and a self-improving feedback loop. Two layers: global config for every session, and an optional swarm template for multi-agent Rails development.
+A lean Claude Code setup for solo founders who want discovery-first workflows, step-by-step architect control, and a self-improving feedback loop.
+
+Claudatron lives in two places at once:
+
+- **Globally** at `~/.claude/` on your computer. The CLAUDE.md baseline and all slash commands load into every Claude Code session, in every project, automatically.
+- **Per project** via an optional `./CLAUDE.md` (stack and conventions specific to that repo) and an optional `.cc/` folder (continuity state between sessions). Both layered on top of the global config.
+
+Two extras stack on top: a continuity layer for cross-session memory, and an optional swarm template for multi-agent Rails development.
 
 ## What's inside
 
@@ -19,12 +26,49 @@ User-level configuration that loads into every Claude Code session.
 | `/backend` | Backend implementation with Rails conventions. Thin controllers, service objects, N+1 awareness. | ~400 |
 | `/frontend` | Frontend implementation. Hotwire-first, DaisyUI/Tailwind, no inline variable assignments in views. | ~350 |
 | `/tests` | Write and run tests. Matches existing test patterns, runs the suite, reports results. | ~300 |
-| `/lesson` | Capture a lesson learned. Writes to project memory or global CLAUDE.md depending on scope. | ~200 |
+| `/spank` | Teach Claude a lesson he won't forget. Writes the rule to project memory or global CLAUDE.md depending on scope. | ~200 |
 | `/resume` | Session opener. Reads `.cc/` plus recent git activity, returns a 5-line summary. | ~300 |
 | `/checkpoint` | Session closer. Updates `.cc/session.md` and `.cc/state.md`, optionally appends a decision. | ~300 |
 | `/roadmap` | View or edit `.cc/roadmap.md` (now / next / later). Never invents items. | ~250 |
 
 Commands load only when invoked. Zero cost when unused.
+
+**Example prompts:**
+
+```
+/resume
+  -> "On branch payments-webhooks. Last session shipped the Stripe signature
+      verifier. Next: handle subscription.deleted. Blocker: missing test fixture."
+
+/audit how is Pundit wired across the admin controllers?
+  -> reads policies, controllers, base classes; reports the pattern, gaps,
+     and any inconsistencies before you touch anything.
+
+/architect add a referral program with single-use codes and a 10% lifetime discount
+  -> clarifies questions, lists affected models/services, breaks the work into
+     numbered steps with risk levels. No code written.
+
+/backend implement step 1 of the plan: the ReferralCode model + generator service
+  -> writes the model, service, migration; flags Pundit/Sidekiq touchpoints;
+     asks before moving to step 2.
+
+/frontend build the referral dashboard card on the billing page
+  -> matches existing DaisyUI patterns; no inline assignments in the view;
+     responsive across mobile/tablet/desktop.
+
+/tests cover ReferralCode.generate! and the dashboard card
+  -> writes specs that match existing patterns, runs the suite, reports pass/fail.
+
+/spank Pundit policies for admin namespace must inherit from AdminPolicy, not ApplicationPolicy
+  -> writes a 2-3 line rule to project memory so next session knows. Claude won't make that mistake twice.
+
+/roadmap move "referral analytics" from later to next
+  -> edits .cc/roadmap.md in place. Refuses to invent items you didn't mention.
+
+/checkpoint
+  -> updates .cc/session.md and .cc/state.md with what shipped, what's next,
+     and any blockers. Asks before logging a decision to .cc/decisions.md.
+```
 
 **Project template** (`templates/CLAUDE.md.template`): a 15-line starting point for any new project's CLAUDE.md.
 
@@ -98,11 +142,19 @@ cd claudatron
 
 Requires: [claude-swarm](https://github.com/paladinsec/claude-swarm) gem. Optional: [rails-mcp-server](https://github.com/nicholasgriffintn/rails-mcp-server) gem.
 
-### Using the swarm with a non-Rails stack
+### Using Claudatron with a non-Rails stack
 
-The swarm structure (architect → backend / frontend / tests) is stack-agnostic. The four prompt files just happen to be filled with Rails/Lightning conventions. Setup is identical: run `./swarm/install.sh /path/to/your/project`, then ask Claude to rewrite the prompts for your stack.
+Claudatron as a whole is stack-agnostic. The global CLAUDE.md is a baseline you edit to match your own stack. The nine slash commands adapt to whatever project they run in. The continuity layer (`.cc/`) is plain markdown; no stack assumptions.
 
-Paste this into Claude inside your target project, swapping the placeholders:
+Only two pieces ship with Rails-specific conventions out of the box:
+
+1. **`global/CLAUDE.md`** — my personal stack notes (Rails, Mongo, Sidekiq, DaisyUI). After running `install.sh`, open `~/.claude/CLAUDE.md` and replace the "My stack" section with yours. The rest of the file (writing style, token discipline, code principles) is stack-neutral and worth keeping.
+
+2. **`swarm/` prompts** — the four agent prompts in `swarm/prompts/` are Lightning Rails. If you want the swarm in a non-Rails project, ask Claude to rewrite them. Setup is identical: run `./swarm/install.sh /path/to/your/project`, then paste the prompt below.
+
+The global slash commands (`/audit`, `/architect`, `/backend`, `/frontend`, `/tests`, etc.) read the project's own CLAUDE.md and existing code patterns at runtime. They don't need rewriting per stack. Drop a project CLAUDE.md that describes your stack and they adapt.
+
+To retarget the swarm prompts, paste this into Claude inside your target project, swapping the placeholders:
 
 ```
 Rewrite the four prompt files in .claude-on-rails/prompts/ (architect.md,
@@ -140,13 +192,13 @@ You can also rename `.claude-on-rails/` to something stack-appropriate (e.g. `.c
 
 ## The feedback loop
 
-Claudatron includes a self-improvement mechanism via `/lesson`.
+Claudatron includes a self-improvement mechanism via `/spank`.
 
-**During a session:** You notice something Claude does wrong. Type `/lesson`. Claude writes a 2-3 line rule to the project's memory directory (or global CLAUDE.md for universal lessons). Next session, Claude reads it automatically.
+**During a session:** You notice something Claude does wrong. Type `/spank`. Claude writes a 2-3 line rule to the project's memory directory (or global CLAUDE.md for universal lessons). Next session, Claude reads it automatically. Same mistake twice earns another spanking.
 
 **Weekly (5 min):** Scan your active projects' memory files. Prune stale entries. If a lesson shows up in multiple projects, promote it to global.
 
-Three stages: **Noted** (written via /lesson) -> **Applied** (auto-loaded next session) -> **Permanent** (promoted to global CLAUDE.md).
+Three stages: **Noted** (written via /spank) -> **Applied** (auto-loaded next session) -> **Permanent** (promoted to global CLAUDE.md).
 
 ## Token budget
 

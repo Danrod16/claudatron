@@ -25,6 +25,6 @@ Run this at the end of a session to persist state for the next one. Updates `.cc
 ## Rules
 - Never invent items for "Next 3 actions" or "Blockers". Only what was discussed.
 - Never edit `.cc/roadmap.md` from /checkpoint. Roadmap is owned by /roadmap.
-- Never touch `~/.claude/CLAUDE.md`. Global rules belong to /lesson.
+- Never touch `~/.claude/CLAUDE.md`. Global rules belong to /spank.
 - If `swarm.yml` exists, do not write to any swarm-managed file. `.cc/` is yours; swarm config is not.
 - Keep entries terse. Bullet lists, not paragraphs.

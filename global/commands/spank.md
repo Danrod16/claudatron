@@ -1,6 +1,6 @@
-# /lesson — Capture a lesson learned
+# /spank — Teach Claude a lesson he won't forget
 
-When invoked, capture a lesson from this session. If the user didn't specify what the lesson is, infer it from recent conversation context or ask.
+When invoked, capture a lesson from this session. The user just caught you doing something wrong (or worth keeping) and is spanking you so you remember. Turn it into a rule. If the user didn't specify what the lesson is, infer it from recent conversation context or ask.
 
 ## Process
 

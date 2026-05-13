@@ -12,7 +12,7 @@
 - Deploy: [e.g., git push sliplane main]
 
 ## Conventions
-[Start empty. Add rules as you learn them via /lesson.]
+[Start empty. Add rules as you learn them via /spank.]
 
 ## Continuity
 If `.cc/` exists, treat it as the source of truth for session state.

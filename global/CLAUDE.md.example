@@ -36,4 +36,4 @@ If a swarm.yml exists in the project root, that system owns orchestration. Don't
 If this project has no CLAUDE.md and the task is non-trivial, mention it. Offer to scaffold one.
 
 ## Learned
-Add lessons here over time via /lesson. One line each.
+Add lessons here over time via /spank. One line each.
