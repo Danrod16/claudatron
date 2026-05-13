@@ -10,7 +10,7 @@ User-level configuration that loads into every Claude Code session.
 
 **CLAUDE.md** sets your baseline: writing preferences, token discipline, code principles, stack context. Under 40 lines, roughly 800 tokens per session.
 
-**Six slash commands:**
+**Nine slash commands:**
 
 | Command | What it does | Tokens |
 |---------|-------------|--------|
@@ -20,10 +20,26 @@ User-level configuration that loads into every Claude Code session.
 | `/frontend` | Frontend implementation. Hotwire-first, DaisyUI/Tailwind, no inline variable assignments in views. | ~350 |
 | `/tests` | Write and run tests. Matches existing test patterns, runs the suite, reports results. | ~300 |
 | `/lesson` | Capture a lesson learned. Writes to project memory or global CLAUDE.md depending on scope. | ~200 |
+| `/resume` | Session opener. Reads `.cc/` plus recent git activity, returns a 5-line summary. | ~300 |
+| `/checkpoint` | Session closer. Updates `.cc/session.md` and `.cc/state.md`, optionally appends a decision. | ~300 |
+| `/roadmap` | View or edit `.cc/roadmap.md` (now / next / later). Never invents items. | ~250 |
 
 Commands load only when invoked. Zero cost when unused.
 
 **Project template** (`templates/CLAUDE.md.template`): a 15-line starting point for any new project's CLAUDE.md.
+
+### Continuity layer
+
+For founders running multiple projects in parallel. Per-project state survives between Claude Code sessions, lives in plain markdown under `.cc/`, and is read by `/resume` at session start and written by `/checkpoint` at session end. Optional. Claudatron still works in projects without a `.cc/` folder, the commands just fall back to git.
+
+| File | Purpose | Owner |
+|------|---------|-------|
+| `.cc/state.md` | Current snapshot (live / in flight / environment) | `/checkpoint` |
+| `.cc/session.md` | Last session summary (branch, shipped, next 3, blockers) | `/checkpoint` |
+| `.cc/roadmap.md` | Now / next / later, one line per item | `/roadmap` |
+| `.cc/decisions.md` | ADR-lite log, newest entries on top | `/checkpoint` (asks first) |
+
+Scaffold with `cc-init` inside a project (helper installed by `install.sh`).
 
 ### Architect workflow
 
@@ -69,7 +85,7 @@ cd claudatron
 ./install.sh
 ```
 
-This copies commands and templates to `~/.claude/`. If no `~/.claude/CLAUDE.md` exists, it creates one from the example. If one exists, it skips it.
+This copies commands and templates to `~/.claude/`. If no `~/.claude/CLAUDE.md` exists, it creates one from the example. If one exists, it skips it. It also asks (y/N) whether to install the `cc-init` helper to `~/.local/bin/` for scaffolding `.cc/` into projects.
 
 After installing, edit `~/.claude/CLAUDE.md` to match your preferences and stack.
 
@@ -99,6 +115,7 @@ Three stages: **Noted** (written via /lesson) -> **Applied** (auto-loaded next s
 | Global CLAUDE.md | ~800 | Every session |
 | Project CLAUDE.md | ~400 | Every session in that project |
 | Each command | 200-400 | On invocation only |
+| `.cc/` files | 150-300 | When `/resume` reads them, otherwise zero |
 
 Total baseline: roughly 1,200 tokens before your first message. Commands add to context only when you use them.
 
