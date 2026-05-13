@@ -13,3 +13,11 @@
 
 ## Conventions
 [Start empty. Add rules as you learn them via /lesson.]
+
+## Continuity
+If `.cc/` exists, treat it as the source of truth for session state.
+- `.cc/state.md` — current snapshot (updated by /checkpoint)
+- `.cc/session.md` — last session summary (updated by /checkpoint)
+- `.cc/roadmap.md` — now / next / later (managed by /roadmap)
+- `.cc/decisions.md` — ADR-lite log (appended by /checkpoint when relevant)
+Start sessions with /resume. End with /checkpoint. Scaffold with `cc-init`.
